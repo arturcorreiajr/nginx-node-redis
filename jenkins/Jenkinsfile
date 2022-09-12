@@ -4,19 +4,34 @@ pipeline{
     stages {
         stage('Get Source'){
             steps{
-                git url: 'https://github.com/arturcorreiajr/teste-pipeline.git', branch: 'main'
+                git url: 'https://github.com/arturcorreiajr/nginx-node-redis.git', branch: 'main'
             }
 
         }
-        stage('Docker Build'){
+        stage('Docker Build API1'){
             steps{
                 script {
-                    dockerapp = docker.build("arturcorreiajunior/producer-rabbitmq-node:${env.BUILD_ID}",
-                        '-f ./producer/Dockerfile .')
+                    dockerapp = docker.build("arturcorreiajunior/api1:${env.BUILD_ID}", '-f ./api1/Dockerfile .')
                 }
             }
         }
-        stage('Docker Push Image'){
+        stage('Docker Push API1'){
+            steps{
+                script {
+                    docker.withRegistry('http://registry.hub.docker.com', 'github-jenkins')
+                    dockerapp.push('latest')
+                    dockerapp.push("${env.BUILD_ID}")
+                }
+            }
+        }
+        stage('Docker Build API2'){
+            steps{
+                script {
+                    dockerapp = docker.build("arturcorreiajunior/api2:${env.BUILD_ID}", '-f ./api1/Dockerfile .')
+                }
+            }
+        }
+        stage('Docker Push API2'){
             steps{
                 script {
                     docker.withRegistry('http://registry.hub.docker.com', 'github-jenkins')

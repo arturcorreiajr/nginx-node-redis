@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: api-1
-        image: misolucoestech/api1:latest
+        image: arturcorreiajunior/api1:latest
         resources:
           requests:
             memory: "64Mi"
@@ -61,7 +61,7 @@ spec:
     spec:
       containers:
       - name: api-2
-        image: misolucoestech/api2:latest
+        image: arturcorreiajunior/api2:latest
         resources:
           requests:
             memory: "64Mi"
