@@ -27,7 +27,7 @@ pipeline{
         stage('Docker Build API2'){
             steps{
                 script {
-                    dockerapp = docker.build("arturcorreiajunior/api2:${env.BUILD_ID}", '-f ./api1/Dockerfile .')
+                    dockerapp = docker.build("arturcorreiajunior/api2:${env.BUILD_ID}", '-f ./api2/Dockerfile .')
                 }
             }
         }
