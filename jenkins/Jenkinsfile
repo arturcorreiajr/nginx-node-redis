@@ -18,7 +18,7 @@ pipeline{
         stage('Docker Push API1'){
             steps{
                 script {
-                    docker.withRegistry('http://registry.hub.docker.com', 'github-jenkins')
+                    docker.withRegistry('http://registry.hub.docker.com', 'github-token-jenkins')
                     dockerapp.push('latest')
                     dockerapp.push("${env.BUILD_ID}")
                 }
@@ -34,7 +34,7 @@ pipeline{
         stage('Docker Push API2'){
             steps{
                 script {
-                    docker.withRegistry('http://registry.hub.docker.com', 'github-jenkins')
+                    docker.withRegistry('http://registry.hub.docker.com', 'github-token-jenkins')
                     dockerapp.push('latest')
                     dockerapp.push("${env.BUILD_ID}")
                 }
