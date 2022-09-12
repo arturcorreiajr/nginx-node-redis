@@ -43,13 +43,10 @@ pipeline{
             }
         }
         stage('Deploy Kubernetes'){
-            agent{
-                Kubernetes{
-                    cloud 'kubernetes'
-                }
-            }
             steps{
-                kubernetesDeploy(configs:'**/k8s/**', kubeconfigId: 'kubeconfig')
+                script {
+                    sh "kubectl apply -f .k8s/server-deploy.yaml"
+                }
             }
         }
 
