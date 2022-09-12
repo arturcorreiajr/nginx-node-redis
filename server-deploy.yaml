@@ -1,0 +1,131 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-1
+  labels:
+    app: api-1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-1
+  template:
+    metadata:
+      labels:
+        app: api-1
+    spec:
+      containers:
+      - name: api-1
+        image: misolucoestech/api1:latest
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3001
+          name: webinterface
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-1
+  labels:
+    service: api-1
+spec:
+  type: NodePort
+  ports:
+  - port: 3001
+    name: webinterface
+  selector:
+    app: api-1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-2
+  labels:
+    app: api-2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-2
+  template:
+    metadata:
+      labels:
+        app: api-2
+    spec:
+      containers:
+      - name: api-2
+        image: misolucoestech/api2:latest
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3002
+          name: webinterface
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-2
+  labels:
+    service: api-2
+spec:
+  type: NodePort
+  ports:
+  - port: 3002
+    name: webinterface
+  selector:
+    app: api-2
+---
+#Redis
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: redis
+  name: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - image: redis:6
+          name: redis
+#          env:
+#            - name: ALLOW_EMPTY_PASSWORD
+#              value: 'yes'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    app: redis
+spec:
+  selector:
+    app: redis
+  type: ClusterIP
+  ports:
+    - port: 6379
+      protocol: TCP
+      targetPort: 6379
+
+
+    

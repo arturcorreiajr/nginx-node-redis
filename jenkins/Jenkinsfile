@@ -1,0 +1,30 @@
+pipeline{
+    agent any
+
+    stages {
+        stage('Get Source'){
+            steps{
+                git url: 'https://github.com/arturcorreiajr/teste-pipeline.git', branch: 'main'
+            }
+
+        }
+        stage('Docker Build'){
+            steps{
+                script {
+                    dockerapp = docker.build("arturcorreiajunior/producer-rabbitmq-node:${env.BUILD_ID}",
+                        '-f ./producer/Dockerfile .')
+                }
+            }
+        }
+        stage('Docker Push Image'){
+            steps{
+                script {
+                    docker.withRegistry('http://registry.hub.docker.com', 'github-jenkins')
+                    dockerapp.push('latest')
+                    dockerapp.push("${env.BUILD_ID}")
+                }
+            }
+        }
+    }
+
+}
