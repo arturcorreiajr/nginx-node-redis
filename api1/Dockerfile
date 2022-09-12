@@ -9,7 +9,7 @@ COPY . .
 
 COPY --chown=node:node . .
 
-RUN apk add --update npm
+RUN apk add --update nodejs npm
 
 RUN npm install
 
