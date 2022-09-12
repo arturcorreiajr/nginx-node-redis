@@ -9,6 +9,8 @@ COPY . .
 
 COPY --chown=node:node . .
 
+RUN apk add --update npm
+
 RUN npm install
 
 USER node
